@@ -1,0 +1,11 @@
+{
+	"name": "ecom-root",
+	"private": true,
+	"scripts": {
+		"dev:docker": "docker compose up --build",
+		"down": "docker compose down",
+		"logs": "docker compose logs -f --tail=100",
+		"dev:frontend": "npm --prefix Forntend run dev",
+		"dev:backend": "npm --prefix Backend run build && npm --prefix Backend run start"
+	}
+}

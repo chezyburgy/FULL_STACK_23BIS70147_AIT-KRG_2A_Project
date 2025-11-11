@@ -1,0 +1,42 @@
+version: "3.9"
+services:
+  mongo:
+    image: mongo:7
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+  backend:
+    build: ./Backend
+    container_name: backend
+    environment:
+      PORT: 4000
+      MONGODB_URI: mongodb://mongo:27017/ecom
+      LOG_LEVEL: info
+      JWT_SECRET: dev_secret_change_me
+    depends_on:
+      - mongo
+    ports:
+      - "4000:4000"
+    restart: unless-stopped
+
+  frontend:
+    build: ./Forntend
+    container_name: frontend
+    environment:
+      VITE_PROXY_TARGET: http://backend:4000
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
+
+networks:
+  default:
+    name: ecom_net
